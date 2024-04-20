@@ -13,6 +13,7 @@ contract FeedbackRewardsV2 {
     uint256 public constant MAX_SUBMISSIONS = 2; // Maximum feedback submissions allowed per address
 
     mapping(address => uint256) public submissionCount;
+    mapping(bytes32 => bool) public validHashedTokens; // Mapping to store valid hashed tokens
 
     constructor(address _usdcAddress) {
         owner = msg.sender;
@@ -24,10 +25,19 @@ contract FeedbackRewardsV2 {
         _;
     }
 
-     function rewardUser(address _user) public onlyOwner {
+    function addValidHashedToken(bytes32 _hashedToken) public onlyOwner {
+        validHashedTokens[_hashedToken] = true;
+    }
+
+    function rewardUser(address _user, bytes32 _hashedToken) public onlyOwner {
+        require(validHashedTokens[_hashedToken], "Invalid or no interaction token provided.");
         require(submissionCount[_user] < MAX_SUBMISSIONS, "Submission limit reached.");
         require(usdc.transfer(_user, REWARD_AMOUNT), "Failed to transfer USDC.");
         submissionCount[_user] += 1; // Increment the submission count for the user
+    }
+
+    function isHashedTokenValid(bytes32 _hashedToken) public view returns (bool) {
+        return validHashedTokens[_hashedToken];
     }
 
     // Function to check the contract's USDC balance, restricted to the owner

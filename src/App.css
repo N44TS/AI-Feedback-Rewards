@@ -1,55 +1,90 @@
-body {
-  background-color: #0a0b0d; /* Dark theme background */
-  color: #e1e1e6; /* Light text for contrast */
-  font-family: 'Poppins', sans-serif; /* Sleek, modern font */
+@import 'https://fonts.googleapis.com/css?family=Montserrat';
+
+@import 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;800&display=swap';
+
+body, html {
+  position: relative; /* Add this if not already present */
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh; /* Ensures minimum height */
+  overflow-y: auto; /* Ensures you can always scroll */
 }
+
 .App {
   text-align: center;
   color: #333;
 }
-.feedback-container {
-  background-color: #16171a;
-  color: #e1e1e6;
-  border: 1px solid #2d2d3f; /* Subtle borders for depth */
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  width: 80%;
-  max-width: 500px;
+
+h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 4.5vw;
+  color: black;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.7); /* Changed to green glow */
 }
+
 textarea {
-  box-sizing: border-box; /* Ensures padding is included in the total width */
-  width: 100%; /* Adjust if necessary to prevent overflow */
-  padding: 10px;
   margin-top: 10px;
-  border: 1px solid #ccc;
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #00bf63;
   border-radius: 4px;
   resize: vertical;
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 3px rgba(0, 255, 0, 0.7);
+  color: grey;
 }
+
+textarea:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.4); /* Changed to green glow */
+  color: #16171a;
+}
+
 button {
-  background-color: #0084ff; /* Vibrant accent color */
-  color: #fff;
+  background-color: #4CAF50;
+  color: white;
   border: none;
   padding: 10px 20px;
   margin-top: 20px;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  font-weight: bold;
 }
 button:hover {
-  background-color: #0056b3;
+  background-color: green;
+  box-shadow: 0 0 25px rgba(2, 62, 138, 0.8);
+  transform: translateY(-3px);
 }
 .success-message {
   color: #28a745;
   margin-top: 20px;
 }
-.spinner {
-  border: 4px solid rgba(0,0,0,.1);
+.spinner, .button-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.2); /* Lighter spinner color */
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: #09f;
+  border-top-color: green; 
+  animation: spin 1s ease infinite;
+}
+.button-spinner {
+  border: 2px solid rgba(0,0,0,.1);
+  border-radius: 50%;
+  border-top-color: #fff;
+  width: 16px;
+  height: 16px;
+  margin-top: 10px; 
   animation: spin 1s ease infinite;
 }
 @keyframes spin {
@@ -77,14 +112,15 @@ button:hover {
   }
 }
 .App-header {
-  background-color: #16171a;
+  background-color: #16171a; /* Change to dark green */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: 24px; /* Adjust font size */
   color: white;
+  font-weight: bold; /* Make it bold */
 }
 .App-link {
   color: #61dafb;
@@ -99,8 +135,35 @@ button:hover {
 }
 .modal {
   background-color: #16171a; /* Dark background for modal */
-  border: 2px solid #0084ff; /* Vibrant accent color for border */
-  /* Other modal styles for positioning and appearance */
+  color: white; /* Text color */
+  padding: 20px;
+  border-radius: 10px; /* Rounded corners */
+  border: 2px solid #0084ff; /* Accent border color */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Shadow for depth */
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Ensure modal is above other content */
+  font-family: "Poppins", sans-serif; /* Consistent font */
+}
+
+.modal button {
+  background-color: #4CAF50; /* Button color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  font-weight: bold;
+}
+
+.modal button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 0 25px rgba(2, 62, 138, 0.8);
+  transform: translateY(-3px);
 }
 .claiming-container {
   display: flex;
@@ -108,4 +171,114 @@ button:hover {
   align-items: center;
   justify-content: center;
   height: 100vh; /* Adjust based on your design */
+}
+
+.button-qualify {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+  background-color: #00adb5;
+  color: #fff;
+  border: none;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.button-qualify::after {
+  content: 'Click to qualify!';
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: transparent;
+  color: #333;
+  font-size: 16px;
+  padding: 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.button-qualify::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  border: solid transparent;
+  border-width: 10px;
+  border-bottom-color: #f30909;
+  margin-left: -10px;
+}
+.feedback-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1200px; /* Adjust based on your preference */
+  margin: auto; /* Center the container */
+  width: 100%; /* Ensure it resizes */
+  padding: 20px; /* Add padding */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.feedback-container img {
+  max-width: 100%; /* Ensure image is responsive */
+  height: auto; /* Maintain aspect ratio */
+}
+
+@media (max-width: 768px) {
+  .feedback-container {
+    flex-direction: column;
+  }
+
+  .feedback-container img {
+    width: 50%; /* Adjust the size on smaller screens */
+    height: auto; /* Maintain aspect ratio */
+    margin-top: 20px; /* Add some space above the image */
+  }
+
+  h1 {
+    font-size: 5vw; /* Larger size on smaller screens */
+  }
+
+  .button-qualify, button {
+    width: 100%; /* Full width for buttons */
+    margin: 10px 0; /* Add space around buttons */
+  }
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.qualify-button-container {
+  position: relative; /* This makes it a reference for the absolute positioning of children */
+  width: 500px; /* Match the image width */
+  height: auto; /* Adjust based on the image's aspect ratio */
+}
+
+.button-spinner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto; /* Centers the spinner */
+  width: 36px; /* Spinner width */
+  height: 36px; /* Spinner height */
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: green; 
+  animation: spin 1s ease infinite;
 }
