@@ -29,6 +29,7 @@ h1 {
   color: black;
   margin-bottom: 10px;
   text-shadow: 0 0 10px rgba(0, 255, 0, 0.7); /* Changed to green glow */
+  line-height: 1.3;
 }
 
 textarea {
