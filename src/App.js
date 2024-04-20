@@ -173,7 +173,7 @@ function App() {
   </div>
             <textarea 
             placeholder=
-            " hat feature would you like to see? How can we improve? Please share your constructive criticism, feature requests, or suggestions for improvement. Detailed feedback is especially appreciated and rewarded! How about you give it a try and send some feedback about this dapp?" 
+            " What feature would you like to see? How can we improve? Please share your constructive criticism, feature requests, or suggestions for improvement. Detailed feedback is especially appreciated and rewarded! How about you give it a try and send some feedback about this dapp?" 
             value={feedbackText} 
             onChange={(e) => setFeedbackText(e.target.value)}
             style={{minHeight: '200px', minWidth: '300px'}}

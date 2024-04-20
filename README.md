@@ -24,9 +24,9 @@ For the best experience view on web, the application is currently not optimized 
 
 ## How to Use
 
-Please make sure you are connected to the **Morph testnet** in order to submit.
+Please make sure you are connected to the **Morph testnet** in order to interact with this Dapp.
 
-1. Qualify to feedback submission by clicking the 'qualify button' - this is simulating a real-world interaction for example testing out a function on an app.
+1. Qualify for feedback submission by clicking the 'qualify button' - this is simulating a real-world interaction for example testing out a function on an app.
 
 2. Once qualified you will then be able to submit feedback, how about submitting some feedback about this dapp, make sure it's constructive feedback, or the AI overlords won't reward you. Press submit, and if it passes as constructive enough, you will be able to claim your reward by clicking the 'claim reward' button.
 
