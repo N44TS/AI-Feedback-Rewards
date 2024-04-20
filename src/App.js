@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import { connectWallet, rewardUser, getFeedbackRewardsContract, addValidHashedToken } from './eth';
 import analyseFeedback from './AiAnalysis.js';
@@ -20,6 +20,16 @@ function App() {
   const [isClaiming, setIsClaiming] = useState(false); // State to manage claiming process
   const [isQualified, setIsQualified] = useState(""); // State to track if the user is qualified to submit feedback
   const [isQualifying, setIsQualifying] = useState(false); // State to manage qualifying process
+
+  useEffect(() => {
+    const isQualified = localStorage.getItem('isQualified') === 'true';
+    const hashedToken = localStorage.getItem('hashedToken');
+    const usageCount = parseInt(localStorage.getItem('hashedTokenUsageCount'), 10);
+
+    if (isQualified && hashedToken && usageCount < 2) {
+      setIsQualified(true);
+    }
+  }, []);
 
   const handleConnectWallet = async () => {
     try {
@@ -45,7 +55,7 @@ function App() {
       const connectionResult = await handleConnectWallet();
       if (!connectionResult.wasConnected) {
         console.log('Wallet connection failed or was cancelled by the user.');
-        setIsQualifying(false); // Ensure to stop the spinner if wallet connection fails
+        setIsQualifying(false); //stop the spinner if wallet connection fails
         return;
       }
       localSigner = connectionResult.signer;
@@ -53,6 +63,8 @@ function App() {
     const token = new Date().toISOString();
     const hashedToken = "0x" + sha256(token).toString();
     localStorage.setItem('hashedToken', hashedToken);
+    localStorage.setItem('isQualified', 'true');
+    localStorage.setItem('hashedTokenUsageCount', '0'); // Initialize usage count
     setIsQualified(true);
     console.log("Stored Hashed Token:", hashedToken);
 
@@ -67,21 +79,40 @@ function App() {
   };
 
   const handleSubmitFeedback = async (feedbackText) => {
+    if (!isQualified) {
+      console.log("User is not qualified to submit feedback.");
+      alert("You are not qualified to submit feedback");
+      return;
+    }
+
+    if (!feedbackText.trim()) {
+      console.log("Feedback text is empty or only contains whitespace.");
+      alert("Please enter some feedback before submitting.");
+      return;
+    }
+
     const hashedToken = localStorage.getItem('hashedToken');
     if (!hashedToken) {
-        alert('Please qualify for feedback submission by clicking the button.');
-        return;
+      console.log("No hashed token found in local storage.");
+      alert("You do not have proof of qualification needed to submit");
+      return;
     }
+
     console.log("Submitting feedback:", feedbackText);
-    const feedbackResult = await analyseFeedback(feedbackText);
-    if (feedbackResult.isConstructive === 'no' && feedbackResult.suggestions.length > 0) {
-      // Display suggestions to the user
-      alert('Your feedback could be more constructive. Here are some suggestions:\n' + feedbackResult.suggestions.join('\n'));
-    } else if (feedbackResult.isConstructive === 'yes') {
-      setFeedbackSubmitted(true); // Only set to true if feedback is constructive
-      setModalIsOpen(true); // Open the reward modal
-    } else {
-      alert('Feedback is not constructive enough. Please try again.');
+    try {
+      const feedbackResult = await analyseFeedback(feedbackText);
+      if (feedbackResult.isConstructive === 'no' && feedbackResult.suggestions.length > 0) {
+        // Display suggestions to the user
+        alert('Your feedback could be more constructive. Here are some suggestions:\n' + feedbackResult.suggestions.join('\n'));
+      } else if (feedbackResult.isConstructive === 'yes') {
+        setFeedbackSubmitted(true); // Only set to true if feedback is constructive
+        setModalIsOpen(true); // Open the reward modal
+      } else {
+        alert('Feedback is not constructive enough. Please try again.');
+      }
+    } catch (error) {
+      console.error("Error during feedback analysis or submission:", error);
+      alert("An error occurred while processing your feedback. Please try again.");
     }
   }
 
@@ -110,7 +141,11 @@ function App() {
       setModalIsOpen(false); // Close modal on success
     } catch (error) {
       console.error('Error rewarding user:', error);
-      alert('Failed to claim reward. Please try again.');
+      if (error.data && error.data.includes("Submission limit reached.")) {
+        alert('Reward cannot be claimed because the submission limit has been reached.');
+      } else {
+        alert('Failed to claim reward. Please try again.');
+      }
       setModalIsOpen(false); // Close modal on failure
     } finally {
       setIsClaiming(false); // Reset the claiming state
@@ -120,7 +155,7 @@ function App() {
   return (
     <div>
        {isWalletConnected && (
-        <div style={{ position: 'absolute', top: 0, left: 0, padding: '10px', zIndex: 1000 }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, padding: '10px', zIndex: 1000, fontStyle: 'italic' }}>
           Connected: {`${userAddress.substring(0, 4)}...${userAddress.substring(userAddress.length - 5)}`}
         </div>
       )}
@@ -133,14 +168,12 @@ function App() {
           <img 
       src={feedbackImage} 
       alt="Feedback Arrow" 
-      style={{ marginLeft: '100px', height: '170px', width: 'auto' }} // Adjust size and spacing as needed
+      style={{ marginLeft: '100px', height: '170px', width: 'auto' }} 
     />
   </div>
-          
-          {/* <p>Please share your constructive criticism, feature requests, or suggestions for improvement. Detailed feedback is especially appreciated and rewarded!</p> */}
-          <textarea 
+            <textarea 
             placeholder=
-            "What feature would you like to see? How can we improve? Please share your constructive criticism, feature requests, or suggestions for improvement. Detailed feedback is especially appreciated and rewarded!" 
+            " hat feature would you like to see? How can we improve? Please share your constructive criticism, feature requests, or suggestions for improvement. Detailed feedback is especially appreciated and rewarded! How about you give it a try and send some feedback about this dapp?" 
             value={feedbackText} 
             onChange={(e) => setFeedbackText(e.target.value)}
             style={{minHeight: '200px', minWidth: '300px'}}
@@ -173,7 +206,6 @@ function App() {
           {isWalletConnected && (
             <button 
               onClick={() => handleSubmitFeedback(feedbackText)}
-              disabled={!isQualified || feedbackText.trim() === ''}
             >
               Submit Feedback
             </button>

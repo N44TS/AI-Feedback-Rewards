@@ -3,11 +3,11 @@ import contractABI from './utils/contractAbi.json';
 
 const contractAddress = '0xAbe3b5a1aC1644698F355Bbf636Bb54C2700fC30';
 
-// Export a function to connect the wallet
+// connect the wallet export function
 export async function connectWallet() {
   if (window.ethereum) {
   try {
-    await window.ethereum.request({ method: 'eth_requestAccounts' }); // Request account access
+    await window.ethereum.request({ method: 'eth_requestAccounts' }); 
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     const address = await signer.getAddress();
@@ -27,10 +27,9 @@ export function getFeedbackRewardsContract(signer) {
   return new ethers.Contract(contractAddress, contractABI, signer);
 }
 
-// Export a function to reward a user, requiring a signer and a hashed token
 export async function rewardUser(signer, userAddress, hashedToken) {
     const feedbackRewards = getFeedbackRewardsContract(signer);
-    // Prefix the hashedToken with '0x' if not already prefixed
+    // Prefix the hashedToken with '0x' as if not already prefixed
     const prefixedHashedToken = hashedToken.startsWith('0x') ? hashedToken : `0x${hashedToken}`;
     try {
       const tx = await feedbackRewards.rewardUser(userAddress, prefixedHashedToken);
@@ -41,7 +40,8 @@ export async function rewardUser(signer, userAddress, hashedToken) {
       throw error;
     }
 }
-// Add a new function to interact with addValidHashedToken
+
+// function to interact with addValidHashedToken
 export async function addValidHashedToken(signer, hashedToken) {
     const feedbackRewards = getFeedbackRewardsContract(signer);
     const tx = await feedbackRewards.addValidHashedToken(hashedToken);

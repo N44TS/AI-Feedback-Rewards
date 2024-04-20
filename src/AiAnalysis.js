@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'https://api-inference.huggingface.co/models/facebook/bart-large-mnli';
-const API_KEY = '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'; // THIS NEEDS TO BE HIDDEN IN ENS!
+const API_KEY = process.env.REACT_APP_HUGGING_FACE_API_KEY;
 
 async function analyseFeedback(feedback) {
   try {
