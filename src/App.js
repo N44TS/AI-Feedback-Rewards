@@ -20,6 +20,7 @@ function App() {
   const [isClaiming, setIsClaiming] = useState(false); // State to manage claiming process
   const [isQualified, setIsQualified] = useState(""); // State to track if the user is qualified to submit feedback
   const [isQualifying, setIsQualifying] = useState(false); // State to manage qualifying process
+  const [isMorphTestnet, setIsMorphTestnet] = useState(false); // State to track if the user is on Morph Testnet
 
   useEffect(() => {
     const isQualified = localStorage.getItem('isQualified') === 'true';
@@ -38,6 +39,10 @@ function App() {
         setUserAddress(address);
         setSigner(signer);
         setIsWalletConnected(true);
+        // Check for Morph Testnet
+        const chainId = await window.ethereum.request({ method: "eth_chainId" });
+        const isMorphTestnet = chainId === "0xa96";
+        setIsMorphTestnet(isMorphTestnet);
         return { wasConnected: true, signer };
       } else {
         return { wasConnected: false };
@@ -137,6 +142,9 @@ function App() {
         return;
       }
       await rewardUser(signer, userAddress, hashedToken);
+      // After rewarding the user successfully, invalidate the hashedToken
+      localStorage.setItem('hashedToken', ''); // Clear the hashedToken
+      localStorage.setItem('isQualified', 'false'); //  mark as not qualified
       alert('Reward successful!');
       setModalIsOpen(false); // Close modal on success
     } catch (error) {
@@ -155,8 +163,10 @@ function App() {
   return (
     <div>
        {isWalletConnected && (
-        <div style={{ position: 'absolute', top: 0, left: 0, padding: '10px', zIndex: 1000, fontStyle: 'italic' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, padding: '10px', zIndex: 1000, fontStyle: 'italic', fontSize: '12px' }}>
           Connected: {`${userAddress.substring(0, 4)}...${userAddress.substring(userAddress.length - 5)}`}
+          <br />
+          {isMorphTestnet ? "Connected to Morph Testnet" : "Please connect to Morph Testnet!"}
         </div>
       )}
       <>

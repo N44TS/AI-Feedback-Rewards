@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import contractABI from './utils/contractAbi.json';
 
-const contractAddress = '0x092E3bBeb7c7A239059de7aB03335FE6261F1554';
+const contractAddress = '0x61397ce703aC4b623aA5C2c8749e2aDa6FA94c05';
 
 // connect the wallet export function
 export async function connectWallet() {
@@ -28,6 +28,7 @@ export function getFeedbackRewardsContract(signer) {
 }
 
 export async function rewardUser(signer, userAddress, hashedToken) {
+    await checkAndSwitchToMorphTestnet(); // Ensure the user is on the Morph Testnet
     const feedbackRewards = getFeedbackRewardsContract(signer);
     // Prefix the hashedToken with '0x' as if not already prefixed
     const prefixedHashedToken = hashedToken.startsWith('0x') ? hashedToken : `0x${hashedToken}`;
@@ -43,8 +44,61 @@ export async function rewardUser(signer, userAddress, hashedToken) {
 
 // function to interact with addValidHashedToken
 export async function addValidHashedToken(signer, hashedToken) {
-    const feedbackRewards = getFeedbackRewardsContract(signer);
-    const tx = await feedbackRewards.addValidHashedToken(hashedToken);
-    await tx.wait();
-    console.log('Hashed token added successfully');
+    try {
+        await checkAndSwitchToMorphTestnet(); // Ensure the user is on the Morph Testnet
+        const feedbackRewards = getFeedbackRewardsContract(signer);
+        const tx = await feedbackRewards.addValidHashedToken(hashedToken);
+        await tx.wait();
+        console.log('Hashed token added successfully');
+    } catch (error) {
+        console.error('Error in addValidHashedToken:', error);
+        throw error; // Rethrow the error to be handled by the caller
+    }
+}
+
+// Function to check if the user is on the Morph Testnet
+export async function checkAndSwitchToMorphTestnet() {
+  if (!window.ethereum) throw new Error('Ethereum object not found, please install MetaMask.');
+
+  const morphTestnetChainId = '0xa96'; // Chain ID for Morph Testnet in hexadecimal
+  try {
+    const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+    if (currentChainId !== morphTestnetChainId) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: morphTestnetChainId }],
+        });
+      } catch (switchError) {
+        // This error code indicates that the chain has not been added to MetaMask.
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [
+                {
+                  chainId: morphTestnetChainId,
+                  rpcUrl: "https://rpc-testnet.morphl2.io", 
+                  blockExplorerUrl: "https://explorer-testnet.morphl2.io",
+                  chainName: "Morph Testnet",
+                  nativeCurrency: {
+                    name: "Ether",
+                    symbol: "ETH", 
+                    decimals: 18
+                  }
+                },
+              ],
+            });
+          } catch (addError) {
+            throw new Error('Failed to add the Morph Testnet.');
+          }
+        } else {
+          throw new Error('Failed to switch to the Morph Testnet.');
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error checking or switching network:', error);
+    throw error;
+  }
 }

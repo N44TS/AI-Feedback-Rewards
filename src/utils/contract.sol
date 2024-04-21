@@ -6,18 +6,18 @@ interface IERC20 {
     function balanceOf(address account) external view returns (uint256);
 }
 
-contract FeedbackRewardsV2 {
+contract DecentraformV1 {
     address public owner;
-    IERC20 public usdc;
-    uint256 public constant REWARD_AMOUNT = 100000; // 0.10 USDC reward
-    uint256 public constant MAX_SUBMISSIONS = 2; // Maximum feedback submissions allowed per address
+    IERC20 public usdt;
+    uint256 public constant REWARD_AMOUNT = 100000000000000000; // 0.10 USDT reward based on the usdt contract on morph having 18 decimals
+    uint256 public constant MAX_SUBMISSIONS = 1; // Maximum feedback submission rewards allowed per address
 
     mapping(address => uint256) public submissionCount;
     mapping(bytes32 => bool) public validHashedTokens; // Mapping to store valid hashed tokens
 
-    constructor(address _usdcAddress) {
+    constructor(address _usdtAddress) {
         owner = msg.sender;
-        usdc = IERC20(_usdcAddress);
+        usdt = IERC20(_usdtAddress);
     }
 
     modifier onlyOwner() {
@@ -29,20 +29,27 @@ contract FeedbackRewardsV2 {
         validHashedTokens[_hashedToken] = true;
     }
 
+    //make sure user cant keep getting rewards with same hash token
+    function invalidateHashedToken(bytes32 _hashedToken) public onlyOwner {
+    validHashedTokens[_hashedToken] = false;
+    } 
+
     function rewardUser(address _user, bytes32 _hashedToken) public onlyOwner {
-        require(validHashedTokens[_hashedToken], "Invalid or no interaction token provided.");
-        require(submissionCount[_user] < MAX_SUBMISSIONS, "Submission limit reached.");
-        require(usdc.transfer(_user, REWARD_AMOUNT), "Failed to transfer USDC.");
-        submissionCount[_user] += 1; // Increment the submission count for the user
+    require(validHashedTokens[_hashedToken], "Invalid or no interaction token provided.");
+    require(submissionCount[_user] < MAX_SUBMISSIONS, "Submission limit reached.");
+    require(usdt.transfer(_user, REWARD_AMOUNT), "Failed to transfer USDT.");
+    submissionCount[_user] += 1; // Increment the submission count for the user
+    invalidateHashedToken(_hashedToken); // Invalidate the hashedToken
     }
 
+    //make sure hash is valid to confirm genuine user before reward
     function isHashedTokenValid(bytes32 _hashedToken) public view returns (bool) {
         return validHashedTokens[_hashedToken];
     }
 
-    // Function to check the contract's USDC balance, restricted to the owner
-    function checkUSDCBalance() public view onlyOwner returns (uint256) {
-        return usdc.balanceOf(address(this));
+    // Function to check the contract's USDT balance, restricted to the owner
+    function checkUSDTBalance() public view onlyOwner returns (uint256) {
+        return usdt.balanceOf(address(this));
     }
 
     // Function to change the owner
