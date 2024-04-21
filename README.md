@@ -8,7 +8,8 @@ This dapp is real-world practical and can offer real-world value to DApp develop
 
 👉 [Live demo](https://ai-feedback-rewards.vercel.app/)
 
-👉 [Deployed contract](https://explorer-testnet.morphl2.io/address/0x61397ce703aC4b623aA5C2c8749e2aDa6FA94c05?tab=contract)
+👉 [Deployed contract](https://explorer-testnet.morphl2.io/address/0x2e070C5256AdfD50776461A068e615E5F003c0B5?tab=contract)
+
 
 For the best experience view on web, the application is currently not optimized for mobile devices.
 
