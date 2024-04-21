@@ -7,11 +7,11 @@ function RewardModal({ isOpen, onClose, children, isLoading, handleRewardUser })
   return (
     <div className="modal">
       <p>Thank you for your feedback! Claim your reward below.</p>
+      {isLoading && <div className="button-spinner"></div>}
       <div className="button-container">
         <button onClick={handleRewardUser} disabled={isLoading}>
-          Claim Reward
+          {isLoading ? 'Processing...' : 'Claim Reward'}
         </button>
-        {isLoading && <div className="button-spinner"></div>}
       </div>
     </div>
   );

@@ -199,9 +199,13 @@ function App() {
                 cursor: 'pointer'
               }}
             />
-            {isQualifying && <div className="button-spinner-overlay"></div>}
+            {isQualifying && (
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div className="button-spinner-overlay"></div>
+    <span style={{ marginRight: '20px', padding: '20px', zIndex: 10000,  color: 'green' }}>Please wait</span>
+  </div>
+)}
           </div>
-
 
           {isWalletConnected && (
             <button 
@@ -210,18 +214,17 @@ function App() {
               Submit Feedback
             </button>
           )}
-          {isClaiming && <div className="button-spinner" style={{ marginTop: '10px' }}></div>}
         </div>    
-        <RewardModal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} handleRewardUser={handleRewardUser} isLoading={isLoading}>
-            <p>Thank you for the constructive feedback!</p>
-            <button onClick={handleRewardUser} disabled={isLoading}>
-              {isLoading ? (
-                <div className="button-spinner"></div>
-              ) : (
-                'Claim Reward'
-              )}
-            </button>
-        </RewardModal>
+        <RewardModal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} handleRewardUser={handleRewardUser} isLoading={isClaiming}>
+    <p>Thank you for the constructive feedback!</p>
+    <button onClick={handleRewardUser} disabled={isClaiming}>
+      {isClaiming ? (
+        <div className="button-spinner"></div>
+      ) : (
+        'Claim Reward'
+      )}
+    </button>
+</RewardModal>
       </>
     </div>
   );
