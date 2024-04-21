@@ -25,9 +25,26 @@ For the best experience view on web, the application is currently not optimized 
 - Simple, straightforward, easy user experience, with all the heavy lifting happening on the backend out of sight. Submitting feedback is as seamless as possible, thereby enhancing the overall user experience.
 - Easy model to apply to businesses, protocols. Directly contributing to creating everyday on-chain interactions that are engaging and valuable.
 
+## How It Works
+
+1. **Verification**: Users prove their interaction with the product, feature, or service through ZKPs (currently simulated in the demo), ensuring feedback is based on genuine experiences.
+This is currently done by passing a hash stored on the users local storage which is then passed to the smart contract as confirmation that they have completed the task that requires feedback. 
+
+2. **Submission and Analysis**: Upon submitting feedback, the text is sent to an off-chain AI model for sentiment analysis to determine its constructiveness. Users receive immediate feedback on their submission's status. The model can be very easily fine tuned based on the importance of certain attributes that a business may want feedback about, for example bug reports weighted higher. 
+
+3. **Reward Distribution**: Constructive feedback triggers a smart contract function on Morph, rewarding the user with tokens directly to their wallet.
+   
+
+## Highlights and Benefits
+
+- **Quality Insights**: Encourages high-quality, constructive feedback from users or community members.
+- **User Engagement**: Token rewards incentivize user participation and engagement.
+- **Decentralization**: Leverages blockchain for transparency, security, and trust.
+- **Adaptability**: Easily integrated and customized to fit various platforms and needs.
+
 ## How to Use
 
-Please make sure you are connected to the **Morph testnet** in order to interact with this Dapp.
+*Please make sure you are connected to the Morph testnet in order to interact with this Dapp.* 
 
 1. Qualify for feedback submission by clicking the 'qualify button' - this is simulating a real-world interaction for example testing out a function on an app.
 
@@ -37,21 +54,13 @@ Your reward goes directly into your wallet.
 
 That's it. Easy peasy.
 
-## How It Works
+## Prerequisites
 
-1. **Verification**: Users prove their interaction with the product, feature, or service through ZKPs (currently simulated in the demo), ensuring feedback is based on genuine experiences.
-This is currently done by passing a hash stored on the users local storage which is then passed to the smart contract as confirmation that they have completed the task that requires feedback. 
+Before getting started with DecentraForm, make sure you have the following prerequisites:
 
-2. **Submission and Analysis**: Upon submitting feedback, the text is sent to an off-chain AI model for sentiment analysis to determine its constructiveness. Users receive immediate feedback on their submission's status. The model can be very easily fine tuned based on the importance of certain attributes that a business may want feedback about, for example bug reports weighted higher. 
-
-3. **Reward Distribution**: Constructive feedback triggers a smart contract function on Morph, rewarding the user with tokens directly to their wallet.
-
-## Highlights and Benefits
-
-- **Quality Insights**: Encourages high-quality, constructive feedback from users or community members.
-- **User Engagement**: Token rewards incentivize user participation and engagement.
-- **Decentralization**: Leverages blockchain for transparency, security, and trust.
-- **Adaptability**: Easily integrated and customized to fit various platforms and needs.
+- MetaMask installed in your browser.
+- An Ethereum wallet with some Sequila Ether bridged to Morph on the Morph testnet for interacting with the DApp. Refer to the documentation [here]([https://www.mode.network/](https://bridge-testnet.morphl2.io/)) for more instructions and how to do it.
+- 
 
 ## AI Analysis
 
@@ -65,3 +74,7 @@ Parameters used by the model to calculate constructiveness are: { ['constructive
 2. **Proof of Interaction**: For each type of interaction, the user generates a ZK proof that they performed the action without revealing their identity or the specifics of the action.
 
 3. **Feedback Submission**: Users submit their feedback along with the ZK proof. The business can verify the proof to ensure the feedback is from a genuine interaction, but they do not know who the user is. This could encourage more honest feedback, and the AI is there to stop time wasters and grifters.
+
+## License
+
+This project is licensed under the MIT License.
