@@ -99,7 +99,7 @@ function App() {
     const hashedToken = localStorage.getItem('hashedToken');
     if (!hashedToken) {
       console.log("No hashed token found in local storage.");
-      alert("You do not have proof of qualification needed to submit");
+      alert("You do not have proof of qualification needed to submit or have already submitted. Bye!");
       return;
     }
 
@@ -139,6 +139,7 @@ function App() {
       if (!isTokenValid) {
         alert('The provided token is not valid. Please try again.');
         setIsClaiming(false); // Reset the claiming state
+        setModalIsOpen(false); // Close the RewardModal
         return;
       }
       await rewardUser(signer, userAddress, hashedToken);
@@ -158,6 +159,7 @@ function App() {
     } finally {
       setIsClaiming(false); // Reset the claiming state
     }
+    setModalIsOpen(false); // Close modal on success
   };
      
   return (
