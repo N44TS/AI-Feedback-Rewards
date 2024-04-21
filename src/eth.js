@@ -44,16 +44,12 @@ export async function rewardUser(signer, userAddress, hashedToken) {
 
 // function to interact with addValidHashedToken
 export async function addValidHashedToken(signer, hashedToken) {
-    try {
-        await checkAndSwitchToMorphTestnet(); // Ensure the user is on the Morph Testnet
-        const feedbackRewards = getFeedbackRewardsContract(signer);
-        const tx = await feedbackRewards.addValidHashedToken(hashedToken);
-        await tx.wait();
-        console.log('Hashed token added successfully');
-    } catch (error) {
-        console.error('Error in addValidHashedToken:', error);
-        throw error; // Rethrow the error to be handled by the caller
-    }
+    await checkAndSwitchToMorphTestnet(); // Ensure the user is on the Morph Testnet
+    const feedbackRewards = getFeedbackRewardsContract(signer);
+    const tx = await feedbackRewards.addValidHashedToken(hashedToken);
+    await tx.wait();
+    console.log('Hashed token added successfully');
+    return true; // Return true if the operation is successful
 }
 
 // Function to check if the user is on the Morph Testnet

@@ -153,7 +153,7 @@ function App() {
       if (error.data && error.data.includes("Submission limit reached.")) {
         alert('Reward cannot be claimed because the submission limit has been reached.');
       } else {
-        alert('Failed to claim reward. Please try again.');
+        alert('Failed to claim reward. You may have already claimed. Please try again or stop.');
       }
       setModalIsOpen(false); // Close modal on failure
     } finally {
