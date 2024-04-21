@@ -99,7 +99,7 @@ function App() {
     const hashedToken = localStorage.getItem('hashedToken');
     if (!hashedToken) {
       console.log("No hashed token found in local storage.");
-      alert("You do not have proof of qualification needed to submit or have already submitted. Bye!");
+      alert("You do not have proof of qualification needed to submit or have already submitted.");
       return;
     }
 

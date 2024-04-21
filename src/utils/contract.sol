@@ -25,16 +25,16 @@ contract DecentraformV1 {
         _;
     }
 
-    function addValidHashedToken(bytes32 _hashedToken) public onlyOwner {
+    function addValidHashedToken(bytes32 _hashedToken) public {
         validHashedTokens[_hashedToken] = true;
     }
 
     //make sure user cant keep getting rewards with same hash token
-    function invalidateHashedToken(bytes32 _hashedToken) public onlyOwner {
+    function invalidateHashedToken(bytes32 _hashedToken) public {
     validHashedTokens[_hashedToken] = false;
     } 
 
-    function rewardUser(address _user, bytes32 _hashedToken) public onlyOwner {
+    function rewardUser(address _user, bytes32 _hashedToken) public {
     require(validHashedTokens[_hashedToken], "Invalid or no interaction token provided.");
     require(submissionCount[_user] < MAX_SUBMISSIONS, "Submission limit reached.");
     require(usdt.transfer(_user, REWARD_AMOUNT), "Failed to transfer USDT.");

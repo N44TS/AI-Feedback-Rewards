@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import contractABI from './utils/contractAbi.json';
 
-const contractAddress = '0x61397ce703aC4b623aA5C2c8749e2aDa6FA94c05';
+const contractAddress = '0x2e070C5256AdfD50776461A068e615E5F003c0B5';
 
 // connect the wallet export function
 export async function connectWallet() {
