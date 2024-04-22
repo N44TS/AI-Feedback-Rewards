@@ -309,3 +309,21 @@ button:active {
   border-top-color: green; 
   animation: spin 1s ease infinite;
 }
+
+@media (max-width: 600px) {
+  .feedback-container {
+    display: none; 
+  }
+
+  .mobile-message {
+    display: block; 
+    text-align: center;
+    padding: 20px;
+  }
+}
+
+@media (min-width: 601px) {
+  .mobile-message {
+    display: none; 
+  }
+}

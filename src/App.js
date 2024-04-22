@@ -227,6 +227,10 @@ function App() {
             </button>
           )}
         </div>    
+        <div className="mobile-message">
+        <h1>Give Feedback. <br></br> Get <span style={{color: '#00bf63'}}>Paid</span>. </h1>
+        <p>For the best experience view on web, the application is currently not optimised for mobile devices.</p>
+        </div>
         <RewardModal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} handleRewardUser={handleRewardUser} isLoading={isClaiming}>
     <p>Thank you for the constructive feedback!</p>
     <button onClick={handleRewardUser} disabled={isClaiming}>
